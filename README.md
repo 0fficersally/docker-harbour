@@ -18,6 +18,9 @@ The domain on which you will be able to access the Portainer user interface and 
 
 The edition of Portainer you would like to use. You can choose between Portainer Community Edition (`ce`) or Portainer Business Edition (`ee`).
 
-## Caddy
+## Reverse Proxy
 
-This stack utilises the [Caddy-Docker-Proxy](https://github.com/lucaslorentz/caddy-docker-proxy) plugin, which allows you to use [Caddy](https://caddyserver.com) as a reverse proxy for Docker containers via labels. Please take a look at their repository for more information on how to use these labels with Caddy.
+This stack utilises the [Caddy-Docker-Proxy](https://github.com/lucaslorentz/caddy-docker-proxy) plugin, which allows you to use [Caddy](https://caddyserver.com) as a reverse proxy for Docker containers via labels. Please have a look at their repository for more information on how to use these labels with Caddy.
+
+> [!IMPORTANT]
+> Before deploying this stack, you must create a Docker network named `caddy`. Whenever you are going to deploy other containers that have to be proxied, you need to add them to the network, so Caddy is able to reach them.
