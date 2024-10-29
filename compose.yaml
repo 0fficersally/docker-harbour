@@ -2,7 +2,6 @@ name: "harbour" # Project Name
 
 services:
   caddy:
-    container_name: "caddy"
     image: "lucaslorentz/caddy-docker-proxy:2.9"
     ports:
       - "443:443" # HTTPS
@@ -11,7 +10,7 @@ services:
     environment:
       - "CADDY_INGRESS_NETWORKS=caddy" # Exclusively Use Caddy Network
     labels:
-      - "caddy.email=${CADDY_EMAIL}" # Certificate Authority Email
+      caddy.email: "${CADDY_EMAIL}" # Certificate Authority Email
     restart: "always"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -21,15 +20,14 @@ services:
       - "caddy"
 
   portainer:
-    container_name: "portainer"
     image: "portainer/portainer-${PORTAINER_EDITION}:lts" # Specify Edition
     labels:
       # User Interface
-      - "caddy_0=portainer.${PORTAINER_DOMAIN}"
-      - "caddy_0.reverse_proxy={{upstreams http 9000}}"
+      caddy_0: "portainer.${PORTAINER_DOMAIN}"
+      caddy_0.reverse_proxy: "{{upstreams http 9000}}"
       # Edge Agent
-      - "caddy_1=edge.${PORTAINER_DOMAIN}"
-      - "caddy_1.reverse_proxy={{upstreams 8000}}"
+      caddy_1: "edge.${PORTAINER_DOMAIN}"
+      caddy_1.reverse_proxy: "{{upstreams 8000}}"
     restart: "unless-stopped"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -39,12 +37,9 @@ services:
 
 volumes:
   caddy_config:
-    name: "caddy_config"
   caddy_data:
-    name: "caddy_data"
   portainer_data:
-    name: "portainer_data"
 
 networks:
   caddy:
-    name: "caddy"
+    external: true
